@@ -31,7 +31,17 @@ export const getStaticProps = async ({params}) => {
     const {items} = await client.getEntries({
         content_type: 'recipe',
         'fields.slug': params.slug // jakie pole ma pasować (może być każde pole z danego modelu)
-    })
+    });
+
+    // Przekierowanie w sytuacji gdy użytkonwik manualnie wpisze adres, który nie istnieje
+    if(!items.length) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
 
     return {
         props: {
