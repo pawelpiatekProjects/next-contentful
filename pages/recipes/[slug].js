@@ -34,7 +34,9 @@ export const getStaticProps = async ({params}) => {
     return {
         props: {
             recipe: items[0]
-        }
+        },
+        revalidate: 1 // jak często (najczęściej) next ma sprawdzać dane z backendu i sprawdzać czy coś się zmieniło
+        // W tym przypadku jest to raz na 1s
     }
 }
 
