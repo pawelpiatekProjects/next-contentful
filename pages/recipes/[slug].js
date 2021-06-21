@@ -1,6 +1,7 @@
 import {createClient} from "contentful";
 import Image from 'next/image';
 import {documentToReactComponents} from '@contentful/rich-text-react-renderer';
+import Skeleton from "../../components/Skeleton";
 
 const client = createClient({
     space: process.env.CONTENTFUL_SPACE_ID,
@@ -8,6 +9,7 @@ const client = createClient({
 });
 
 export const getStaticPaths = async () => {
+
     const response = await client.getEntries({content_type: 'recipe'});
 
     const paths = response.items.map(item => {
@@ -20,7 +22,7 @@ export const getStaticPaths = async () => {
 
     return {
         paths,
-        fallback: false
+        fallback: true // jeśli jest na false to nie ma fallback page tylko jest 404 page
     }
 }
 
@@ -41,6 +43,8 @@ export const getStaticProps = async ({params}) => {
 }
 
 export default function RecipeDetails({recipe}) {
+
+    if(!recipe) return <Skeleton/>
 
     const {featuredImage, title, cookingTime, ingredients, method} = recipe.fields;
     console.log(featuredImage)
